@@ -25,13 +25,11 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import axios from "axios";
+import api from "./api"; // axios 인스턴스 가져오기
 
 const question = ref("");
 const answer = ref("");
 const loading = ref(false);
-
-const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 
 async function askAI() {
   if (!question.value.trim()) return;
@@ -39,12 +37,9 @@ async function askAI() {
   answer.value = "";
 
   try {
-    const res = await axios.post(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`,
-      {
-        contents: [{ parts: [{ text: question.value }] }],
-      }
-    );
+    const res = await api.post("generateContent", {
+      contents: [{ parts: [{ text: question.value }] }],
+    });
     answer.value = res.data.candidates[0].content.parts[0].text;
   } catch (err) {
     answer.value = "오류가 발생했습니다.";
@@ -53,4 +48,5 @@ async function askAI() {
   }
 }
 </script>
+
 <style scoped></style>
