@@ -1,5 +1,5 @@
 import { createApp } from "vue";
 import App from "./App.vue";
-import "./style.css"; // Tailwind 불러오기
+import "./style.css";
 
 createApp(App).mount("#app");

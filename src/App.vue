@@ -25,7 +25,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import api from "./api"; // axios 인스턴스 가져오기
+import api from "./api";
 
 const question = ref("");
 const answer = ref("");
