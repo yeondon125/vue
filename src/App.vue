@@ -37,12 +37,36 @@ async function askAI() {
   answer.value = "";
 
   try {
-    const res = await api.post("generateContent", {
-      contents: [{ parts: [{ text: question.value }] }],
+    const res = await api.post("", {
+      contents: [
+        {
+          parts: [
+            {
+              text: question.value,
+            },
+          ],
+        },
+      ],
     });
-    answer.value = res.data.candidates[0].content.parts[0].text;
-  } catch (err) {
-    answer.value = "오류가 발생했습니다.";
+
+    if (
+      res.data.candidates &&
+      res.data.candidates[0] &&
+      res.data.candidates[0].content
+    ) {
+      answer.value = res.data.candidates[0].content.parts[0].text;
+    } else {
+      answer.value = "응답을 처리할 수 없습니다.";
+    }
+  } catch (err: any) {
+    console.error("API 오류:", err);
+    if (err.response) {
+      answer.value = `오류: ${err.response.status} - ${
+        err.response.data?.error?.message || "알 수 없는 오류"
+      }`;
+    } else {
+      answer.value = "네트워크 오류가 발생했습니다.";
+    }
   } finally {
     loading.value = false;
   }
